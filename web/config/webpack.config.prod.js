@@ -153,8 +153,8 @@ module.exports = {
         oneOf: [
           loaders.urlLoader,          
           loaders.jsLoader,
-          loaders.tsLoader
-          oaders.scssLoaderProd,
+          loaders.tsLoader,
+          loaders.scssLoaderProd,
           loaders.lessLoaderProd,
           loaders.fileLoader,
           // ** STOP ** Are you adding a new loader?

@@ -148,7 +148,7 @@ module.exports = {
         oneOf: [
           loaders.urlLoader,
           loaders.jsLoader,
-          loaders.tsLoader
+          loaders.tsLoader,
           loaders.cssLoaderDev,
           loaders.scssLoaderDev,
           loaders.lessLoaderDev,

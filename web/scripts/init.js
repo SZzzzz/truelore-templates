@@ -40,10 +40,22 @@ module.exports = function(
 
   // Setup the script rules
   appPackage.scripts = {
-    start: 'react-scripts-ts start',
-    build: 'react-scripts-ts build',
-    test: 'react-scripts-ts test --env=jsdom',
-    eject: 'react-scripts-ts eject',
+    start: 'react-scripts-ts-antd start',
+    build: 'react-scripts-ts-antd build',
+    test: 'react-scripts-ts-antd test --env=jsdom',
+    eject: 'react-scripts-ts-antd eject',
+    precommit: 'lint-staged',
+    'prettier-all': "prettier --write 'src/**/*' '!src/{assets,datas}/**'"
+  };
+
+  // Setup the prettier and git hook
+  appPackage.prettier = {
+    'printWidth': 100,
+    'singleQuote': true
+  };
+
+  appPackage['lint-staged'] = {
+    '*.{ts,tsx,scss,less,md}': ['prettier --write', 'git add']
   };
 
   fs.writeFileSync(
@@ -103,25 +115,24 @@ module.exports = function(
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
 
+  const { dependencies, devDependencies} = require('../config/dependencies');
   // Install dev dependencies
-  const types = [
-    '@types/node',
-    '@types/react',
-    '@types/react-dom',
-    '@types/jest',
-    'typescript',
-  ];
-
-  console.log(
-    `Installing ${types.join(', ')} as dev dependencies ${command}...`
-  );
+  console.log(`Installing ${devDependencies.join(', ')} as dev dependencies ${command}...`);
   console.log();
 
-  const devProc = spawn.sync(command, args.concat('-D').concat(types), {
-    stdio: 'inherit',
-  });
+  const devProc = spawn.sync(command, args.concat('-D').concat(devDependencies), { stdio: 'inherit' });
   if (devProc.status !== 0) {
-    console.error(`\`${command} ${args.concat(types).join(' ')}\` failed`);
+    console.error(`\`${command} ${args.concat(devDependencies).join(' ')}\` failed`);
+    return;
+  }
+
+  // 安装 antd, mobx 等
+  console.log(`Installing ${dependencies.join(', ')} as dependency ${command}...`);
+  console.log();
+
+  const antProc = spawn.sync(command, args.concat(dependencies), { stdio: 'inherit' });
+  if (antProc.status !== 0) {
+    console.error(`\`${command} ${args.concat(dependencies).join(' ')}\` failed`);
     return;
   }
 

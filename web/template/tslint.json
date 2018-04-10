@@ -1,5 +1,6 @@
 {
   "extends": ["tslint-react", "tslint-config-prettier"],
+  "defaultSeverity": "warning",  
   "rules": {
     "ban": false,
     "class-name": true,

@@ -69,7 +69,7 @@ const jsLoader = {
         libraryDirectory: 'lib',
         style: 'css',
       }
-    ])]
+    ])],
     // @remove-on-eject-end
     compact: true,
   },

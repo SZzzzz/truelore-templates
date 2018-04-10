@@ -3,7 +3,8 @@ exports.dependencies = [
   'mobx',
   'mobx-react',
   'mobx-react-router',  
-  'react-router'
+  'react-router',
+  'axios'
 ];
 
 exports.devDependencies = [

@@ -154,6 +154,7 @@ module.exports = {
           loaders.urlLoader,          
           loaders.jsLoader,
           loaders.tsLoader,
+          loaders.cssLoaderProd,
           loaders.scssLoaderProd,
           loaders.lessLoaderProd,
           loaders.fileLoader,

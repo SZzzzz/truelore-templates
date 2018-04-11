@@ -82,16 +82,17 @@ const jsLoader = {
 const tsLoader = {
   test: /\.(ts|tsx)$/,
   include: paths.appSrc,
-  exclude: /node_modules/,  
-  loader: require.resolve('ts-loader'),
-  options: {
-    transpileOnly: true,
-    getCustomTransformers: () => ({
-      before: [
-        tsImportPluginFactory(importPluginOption)
-      ]
-    })
-  }
+  use: [
+    {
+      loader: require.resolve('ts-loader'),
+      options: {
+        transpileOnly: true,
+        getCustomTransformers: () => ({
+          before: [tsImportPluginFactory(importPluginOption)]
+        })
+      }
+    }
+  ]
 };
 
 const postcssLoader = {

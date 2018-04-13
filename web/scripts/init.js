@@ -45,7 +45,8 @@ module.exports = function(
     test: 'react-scripts-ts-antd test --env=jsdom',
     eject: 'react-scripts-ts-antd eject',
     precommit: 'lint-staged',
-    'prettier-all': "prettier --write 'src/**/*' '!src/{assets,datas}/**'"
+    'prettier-all': "prettier --write 'src/**/*' '!src/{assets,datas}/**'",
+    xb: 'zdxb --'
   };
 
   // Setup the prettier and git hook

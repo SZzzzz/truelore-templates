@@ -22,5 +22,6 @@ exports.devDependencies = [
   'prettier',
   'husky',
   'tslint-config-prettier',
-  'lint-staged'
+  'lint-staged',
+  'zdxb'
 ];

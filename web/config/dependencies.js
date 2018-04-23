@@ -4,6 +4,7 @@ exports.dependencies = [
   'mobx-react',
   'mobx-react-router',  
   'react-router',
+  'react-router-dom',
   'axios'
 ];
 
@@ -14,6 +15,8 @@ exports.devDependencies = [
   '@types/jest',
   '@types/enzyme',
   '@types/react-router',
+  '@types/react-router-dom',
+  '@types/classnames',
   'typescript',
   'react-test-renderer',
   'enzyme',

@@ -1,6 +1,6 @@
 {
   "name": "@truelore/web-template",
-  "version": "2.15.1",
+  "version": "2.15.2",
   "description": "Configuration and scripts for Create React App.",
   "repository": "wmonk/create-react-app",
   "license": "BSD-3-Clause",

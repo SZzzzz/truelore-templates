@@ -1,5 +1,6 @@
 const paths = require('./paths');
 const tsImportPluginFactory = require('ts-import-plugin');
+const tsClassnamePluginFactory = require('ts-classname-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const autoprefixer = require('autoprefixer')({
@@ -88,7 +89,7 @@ const tsLoader = {
       options: {
         transpileOnly: true,
         getCustomTransformers: () => ({
-          before: [tsImportPluginFactory(importPluginOption)]
+          before: [tsImportPluginFactory(importPluginOption), tsClassnamePluginFactory()]
         })
       }
     }

@@ -117,6 +117,7 @@ const precssLoader = {
     // https://github.com/facebookincubator/create-react-app/issues/2677
     // don't need now
     // ident: 'postcss',
+    parser: 'postcss-scss',
     plugins: () => [
       precss,
       flexBugFixes,

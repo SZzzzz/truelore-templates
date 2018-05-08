@@ -24,7 +24,6 @@ exports.devDependencies = [
   'mobx-react-devtools',
   'prettier',
   'husky',
-  'tslint-config-prettier',
   'lint-staged',
   'zdxb'
 ];

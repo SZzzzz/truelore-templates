@@ -33,11 +33,6 @@ const spawn = require('react-dev-utils/crossSpawn');
    '*.{ts,tsx,scss,less,md}': ['prettier --write', 'git add']
  };
 
- const gitProc = spawn.sync('git', ['init'], { stdio: 'inherit' });
- if (gitProc.status !== 0) {
-   console.error(`git init failed, precommit script will not work. you need to reinstall husky after run git init by yourself.`);
- }
-
  fs.writeFileSync(
    path.join(appPath, 'package.json'),
    JSON.stringify(appPackage, null, 2)

@@ -5,7 +5,9 @@ exports.dependencies = [
   'mobx-react-router',  
   'react-router',
   'react-router-dom',
-  'axios'
+  'axios',
+  'jsonwebtoken',
+  'raven-js'
 ];
 
 exports.devDependencies = [
@@ -13,6 +15,7 @@ exports.devDependencies = [
   '@types/react',
   '@types/react-dom',
   '@types/jest',
+  '@types/webpack',
   '@types/enzyme',
   '@types/react-router',
   '@types/react-router-dom',

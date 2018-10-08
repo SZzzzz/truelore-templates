@@ -1,14 +1,23 @@
-import agent from './agent';
-import { AxiosRequestConfig } from 'axios';
+import { defaultAgent } from './agent';
+import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
+import Raven from 'raven-js';
+import globalNotice, { Notice } from 'utils/globalNotice';
 
 enum HttpMethods {
   GET = 'get',
   POST = 'post',
   PUT = 'put',
-  DELETE = 'delete'
+  DELETE = 'delete',
+  PATCH = 'patch'
 }
 
-interface BaseConfig {
+type Tip = string | ((res: AxiosResponse) => string);
+interface NoticeConfig {
+  successTip?: Tip;
+  failTip?: Tip;
+}
+
+interface BaseConfig extends NoticeConfig {
   url: string;
   params?: Object;
 }
@@ -17,25 +26,25 @@ interface PostConfig extends BaseConfig {
   data: Object;
 }
 
-interface ServerResonpse<T> {
-  data: T;
-}
-
 export default class BaseApi {
-  async get<T>(config: BaseConfig, extra?: AxiosRequestConfig) {
+  protected async get<T>(config: BaseConfig, extra?: AxiosRequestConfig) {
     return this.request<T>(HttpMethods.GET, config, extra);
   }
 
-  async post<T>(config: PostConfig, extra?: AxiosRequestConfig) {
+  protected async post<T>(config: PostConfig, extra?: AxiosRequestConfig) {
     return this.request<T>(HttpMethods.POST, config, extra);
   }
 
-  async delete<T>(config: BaseConfig, extra?: AxiosRequestConfig) {
+  protected async delete<T>(config: BaseConfig, extra?: AxiosRequestConfig) {
     return this.request<T>(HttpMethods.DELETE, config, extra);
   }
 
-  async put<T>(config: PostConfig, extra?: AxiosRequestConfig) {
+  protected put<T>(config: PostConfig, extra?: AxiosRequestConfig) {
     return this.request<T>(HttpMethods.PUT, config, extra);
+  }
+
+  protected patch<T>(config: PostConfig, extra?: AxiosRequestConfig) {
+    return this.request<T>(HttpMethods.PATCH, config, extra);
   }
 
   private async request<T>(
@@ -49,19 +58,37 @@ export default class BaseApi {
       params: config.params || {},
       ...extra
     };
-    if (method === HttpMethods.POST || method === HttpMethods.PUT) {
+    if (method === HttpMethods.POST || method === HttpMethods.PUT || method === HttpMethods.PATCH) {
       requestConfig.data = (config as PostConfig).data || {};
     }
 
     try {
-      const result = await agent.request<ServerResonpse<T>>(requestConfig);
-      console.log(result);
-      return result.data.data as T;
+      const result = await this.agent.request<T>(requestConfig);
+      if (config.successTip) {
+        this.notice.successNotice(this.getTip(config.successTip, result));
+      }
+      return result.data as T;
     } catch (error) {
-      // TODO 自定义默认处理方式
-      console.log('api 请求错误');
-      console.log(error);
+      console.error(`api request error: ${config.url}`);
+      console.info(JSON.stringify(error, null, 2));
+      if (config.failTip) {
+        this.notice.errorNotice(this.getTip(config.failTip, error.response as AxiosResponse));
+      }
+      Raven.captureException(error);
       throw error;
     }
   }
+
+  private getTip(tip: Tip, res: AxiosResponse) {
+    if (typeof tip === 'string') {
+      return tip;
+    } else {
+      return tip(res);
+    }
+  }
+
+  constructor(
+    public agent: AxiosInstance = defaultAgent,
+    public notice: Notice = globalNotice
+  ) {}
 }

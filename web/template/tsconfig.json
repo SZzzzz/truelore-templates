@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "build/dist",
     "module": "esnext",
     "target": "es5",
@@ -18,7 +19,17 @@
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "baseUrl": "."
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "paths": {
+      "apis/*": ["src/apis/*"],
+      "components/*": ["src/components/*"],
+      "pages/*": ["src/pages/*"],
+      "models/*": ["src/models/*"],
+      "stores/*": ["src/stores/*"],
+      "assets/*": ["src/assets/*"],
+      "utils/*": ["src/utils/*"]
+    }
   },
   "exclude": [
     "node_modules",

@@ -1,1 +1,1 @@
-// 声明接口数据模型
+// api layer interface

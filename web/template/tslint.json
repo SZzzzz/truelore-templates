@@ -1,6 +1,13 @@
 {
   "extends": ["tslint-react", "tslint-config-prettier"],
   "defaultSeverity": "warning",  
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
   "rules": {
     "ban": false,
     "class-name": true,

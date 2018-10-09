@@ -4,6 +4,7 @@ const appPath = process.cwd();
 const appPackage = require(path.join(appPath, 'package.json'));
 const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 const spawn = require('react-dev-utils/crossSpawn');
+const paths = require('../config/paths');
 
  // Copy over some of the devDependencies
  appPackage.dependencies = appPackage.dependencies || {};
@@ -40,7 +41,6 @@ const spawn = require('react-dev-utils/crossSpawn');
 
 let command;
 let args;
-let needToInstall = [];
 if (useYarn) {
   command = 'yarnpkg';
   args = ['add'];
@@ -71,5 +71,10 @@ if (missingDependencies.length > 0) {
   if (antProc.status !== 0) {
     console.error(`\`${command} ${args.concat(missingDependencies).join(' ')}\` failed`);
   }
+}
+
+if (!fs.existsSync(paths.appTsProdConfig)) {
+  console.log('copy tsconfig.prod.json');
+  fs.copyFileSync(path.resolve(__dirname, '../template/tsconfig.prod.json'), paths.appPath);
 }
 console.log('update finish.');

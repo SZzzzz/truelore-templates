@@ -17,7 +17,7 @@ const paths = require('../config/paths');
    ...scripts,
    start: 'react-scripts-ts-antd start',
    build: 'react-scripts-ts-antd build',
-   test: 'react-scripts-ts-antd test --env=jsdom',
+   test: 'react-scripts-ts-antd test',
    eject: 'react-scripts-ts-antd eject',
    precommit: 'lint-staged',
    'prettier-all': "prettier --write 'src/**/*' '!src/{assets,datas}/**'",
@@ -75,6 +75,6 @@ if (missingDependencies.length > 0) {
 
 if (!fs.existsSync(paths.appTsProdConfig)) {
   console.log('copy tsconfig.prod.json');
-  fs.copyFileSync(path.resolve(__dirname, '../template/tsconfig.prod.json'), paths.appPath);
+  fs.copyFileSync(path.resolve(__dirname, '../template/tsconfig.prod.json'), paths.appTsProdConfig);
 }
 console.log('update finish.');

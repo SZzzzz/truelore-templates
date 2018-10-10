@@ -12,7 +12,7 @@ const chalk = require('chalk');
 const paths = require('../../config/paths');
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const ts = require('typescript');
-function parseTsConfigFromFile(configPath) {
+function getPathsFromTsConfig(configPath) {
   const host = ts.sys;
   const {config: json, error} = ts.readConfigFile(configPath, host.readFile);
   if (error) {
@@ -22,7 +22,7 @@ function parseTsConfigFromFile(configPath) {
   if (parsedConfig.errors.length > 0) {
     throw new Error(ts.formatDiagnostics(config.errors, ts.createCompilerHost({})));
   }
-  return parsedConfig;
+  return parsedConfig.options.paths || {};
 }
 
 module.exports = (resolve, rootDir, isEjecting) => {
@@ -62,7 +62,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     moduleNameMapper: {
       '^react-native$': 'react-native-web',
       '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-      ...pathsToModuleNameMapper(parseTsConfigFromFile(paths.appTsTestConfig).options.paths, { prefix: '<rootDir>/' })
+      ...pathsToModuleNameMapper(getPathsFromTsConfig(paths.appTsTestConfig), { prefix: '<rootDir>/' })
     },
     globals: {
       'ts-jest': {

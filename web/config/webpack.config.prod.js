@@ -306,7 +306,7 @@ module.exports = {
               },
              },
            ],
-         },
+          },
           // Process application JS with Babel.
           // The preset includes JSX, Flow, and some ESnext features.
           {

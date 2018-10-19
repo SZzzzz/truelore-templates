@@ -40,8 +40,26 @@ const { loaders } = require('react-scripts-ts-antd');
 }
 ```
 
-## Tips
+## Theme
+Now you can use theme field in package to customize antd theme. Value of theme field should be a plain object or a path to the file which export a object. This theme object will be passed to the `modifyVars` option of `less-loader`
+```json
+// package.json
+{
+  "theme": {
+    "@primary-color": "#000"
+  }
+}
 
+// or 
+{
+  "theme": "path-to-your-theme-file"
+}
+
+```
+
+You can find all Ant Design Less variables in [here](https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less)
+
+## Tips
 ### How to avoid importing styles twice
 If you want to customize theme by [overriding less variables](https://ant.design/docs/react/customize-theme) like below.
 
@@ -73,11 +91,11 @@ module.exports = function override(config, env) {
         tsImportPluginFactory([
           {
             libraryName: 'antd',
-            libraryDirectory: 'lib',
+            libraryDirectory: 'es',
           },
           {
             libraryName: 'antd-mobile',
-            libraryDirectory: 'lib',
+            libraryDirectory: 'es',
           }
         ])
       ]

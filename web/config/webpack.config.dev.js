@@ -24,6 +24,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const tsImportPluginFactory = require('ts-import-plugin');
 const tsClassnamePluginFactory = require('ts-classname-plugin');
+const getTheme = require('../scripts/utils/getAntdTheme');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -39,13 +40,13 @@ const env = getClientEnvironment(publicUrl);
 const importPluginOption = [
   {
     libraryName: 'antd',
-    libraryDirectory: 'lib',
-    style: 'css'
+    libraryDirectory: 'es',
+    style: true
   },
   {
     libraryName: 'antd-mobile',
-    libraryDirectory: 'lib',
-    style: 'css',
+    libraryDirectory: 'es',
+    style: true
   }
 ];
 
@@ -56,6 +57,7 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 const lessRegex = /\.less$/;
 const lessModuleRegex = /\.module\.less$/;
+const theme = getTheme();
 
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -87,7 +89,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
     },
   ];
   if (preProcessor) {
-    loaders.push(require.resolve(preProcessor));
+    loaders.push(typeof preProcessor === 'string' ? require.resolve(preProcessor) : preProcessor);
   }
   return loaders;
 };
@@ -394,7 +396,18 @@ module.exports = {
           {
             test: lessRegex,
             exclude: lessModuleRegex,
-            use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
+            use: getStyleLoaders(
+              { 
+                importLoaders: 2 
+              }, 
+              {
+                loader: 'less-loader',
+                options: {
+                  modifyVars: theme,
+                  javascriptEnabled: true,
+                },
+              }
+            ),
           },
           // Adds support for CSS Modules, but using LESS
           // using the extension .module.less
@@ -406,7 +419,13 @@ module.exports = {
                 modules: true,
                 getLocalIdent: getCSSModuleLocalIdent,
               },
-              'less-loader'
+              {
+                loader: 'less-loader',
+                options: {
+                  modifyVars: theme,
+                  javascriptEnabled: true,
+                },
+              }
             ),
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.

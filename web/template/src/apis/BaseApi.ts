@@ -12,9 +12,10 @@ enum HttpMethods {
 }
 
 type Tip<T> = string | ((res: AxiosResponse<T>) => string);
+type CommonErrorResponse = {message: string};
 interface NoticeConfig<T> {
   successTip?: Tip<T>;
-  failTip?: Tip<{message: string}>;
+  failTip?: Tip<CommonErrorResponse>;
 }
 
 interface BaseConfig<T> extends NoticeConfig<T>{
@@ -72,7 +73,7 @@ export default class BaseApi {
       console.error(`api request error: ${config.url}`);
       console.info(JSON.stringify(error, null, 2));
       if (config.failTip) {
-        this.notice.errorNotice(this.getTip<T>(config.failTip, error.response as AxiosResponse<{message: string}>));
+        this.notice.errorNotice(this.getTip<CommonErrorResponse>(config.failTip, error.response as AxiosResponse<{message: string}>));
       }
       Raven.captureException(error);
       throw error;

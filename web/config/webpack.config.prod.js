@@ -28,6 +28,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const tsImportPluginFactory = require('ts-import-plugin');
 const tsClassnamePluginFactory = require('ts-classname-plugin');
+const getTheme = require('../scripts/utils/getAntdTheme');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -51,13 +52,13 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 const importPluginOption = [
   {
     libraryName: 'antd',
-    libraryDirectory: 'lib',
-    style: 'css'
+    libraryDirectory: 'es',
+    style: true
   },
   {
     libraryName: 'antd-mobile',
-    libraryDirectory: 'lib',
-    style: 'css',
+    libraryDirectory: 'es',
+    style: true
   }
 ];
 
@@ -68,6 +69,7 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 const lessRegex = /\.less$/;
 const lessModuleRegex = /\.module\.less$/;
+const theme = getTheme();
 
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -100,12 +102,12 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
     },
   ];
   if (preProcessor) {
-    loaders.push({
+    loaders.push(typeof preProcessor === 'string' ? {
       loader: require.resolve(preProcessor),
       options: {
         sourceMap: shouldUseSourceMap,
       },
-    });
+    } : preProcessor);
   }
   return loaders;
 };
@@ -470,7 +472,14 @@ module.exports = {
                 importLoaders: 2,
                 sourceMap: shouldUseSourceMap,
               },
-              'less-loader'
+              {
+                loader: 'less-loader',
+                options: {
+                  modifyVars: theme,
+                  javascriptEnabled: true,
+                  sourceMap: shouldUseSourceMap,
+                },
+              }
             ),
           },
           // Adds support for CSS Modules, but using LESS
@@ -484,7 +493,14 @@ module.exports = {
                 modules: true,
                 getLocalIdent: getCSSModuleLocalIdent,
               },
-              'less-loader'
+              {
+                loader: 'less-loader',
+                options: {
+                  modifyVars: theme,
+                  javascriptEnabled: true,
+                  sourceMap: shouldUseSourceMap,
+                },
+              }
             ),
           },
           // "file" loader makes sure assets end up in the `build` folder.
